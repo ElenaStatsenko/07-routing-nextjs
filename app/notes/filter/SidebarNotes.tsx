@@ -15,7 +15,7 @@ export default  async function SidebarNotes({tag}: TagProps){
       <ul>
         {response.data.notes.map((note: Note) => (
           <li key={note.id}>
-            <Link href={`/notes/filter/${note.tag}`}>{note.tag}</Link>
+            <Link href={`/notes/filter/${tag}`}>{note.tag}</Link>
           </li>
         ))}
       </ul>
