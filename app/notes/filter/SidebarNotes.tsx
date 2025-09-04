@@ -1,25 +1,20 @@
-import { notehubAPI } from "@/lib/api/notes";
+import css from "./SidebarNotes.module.css"
 import Link from "next/link";
-import type { Note } from "@/types/note";
-interface TagProps{
-    tag: "Work" | "Personal" | "Meeting" | "Shopping" | "Todo";
-}
-export default  async function SidebarNotes({tag}: TagProps){
-    const response=  await notehubAPI.get("/notes",{params:{
-        tag:tag || undefined
-    }}
-    )
-    console.log(response.data.notes)
-    return (
-        <aside>
-      <ul>
-        {response.data.notes.map((note: Note) => (
-          <li key={note.id}>
-            <Link href={`/notes/filter/${tag}`}>{note.tag}</Link>
+
+export default async function SidebarNotes() {
+  const tags = ["Work", "Personal", "Meeting", "Shopping", "Todo"];
+  return (
+    <aside>
+      <ul className={css.menuList}>
+        {tags.map((tag) => (
+          <li key={tag} className={css.menuItem}>
+            <Link href={`/notes/filter/${tag}`} className={css.menuLink}>{tag}</Link>
           </li>
         ))}
+        <li className={css.menuItem}>
+          <Link href={`/notes/filter/`} className={css.menuLink}>All notes</Link>
+        </li>
       </ul>
     </aside>
   );
-    
 }

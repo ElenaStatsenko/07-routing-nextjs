@@ -13,6 +13,12 @@ export const notehubAPI = axios.create({
     Authorization: `Bearer ${myKey}`,
   },
 });
+// export const getNotes = async (tag?: string) => {
+//   const res = await axios.get<NoteListResponse>('/notes', {
+//     params: { tag }, // 👈 замість categoryId
+//   });
+//   return res.data;
+// };
 
 export const fetchNotes = async (
   page: number = 1,
