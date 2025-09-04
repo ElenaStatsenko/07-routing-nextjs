@@ -8,6 +8,7 @@ type Props= {
 const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 export default async function Notes({params}:Props){
    const {category} = await params;
+   console.log(category);
    
    const response = await notehubAPI.get("/notes",{ params: { tag: category } });
  
