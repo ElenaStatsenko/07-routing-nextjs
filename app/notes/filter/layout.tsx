@@ -8,12 +8,12 @@ export default function LayoutNotes({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={css.container}>
-      <div className={css.sidebar}>
+    <section className={css.container}>
+      <aside className={css.sidebar}>
         <SidebarNotes />
-      </div>
+      </aside>
 <div className={css.notesWrapper}>{children}</div>
      
-    </div>
+    </section>
   );
 }

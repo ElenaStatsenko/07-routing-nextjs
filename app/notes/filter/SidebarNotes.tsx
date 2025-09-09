@@ -4,7 +4,7 @@ import Link from "next/link";
 export default async function SidebarNotes() {
   const tags = ["Work", "Personal", "Meeting", "Shopping", "Todo"];
   return (
-    <aside>
+    <div>
       <ul className={css.menuList}>
         {tags.map((tag) => (
           <li key={tag} className={css.menuItem}>
@@ -15,6 +15,6 @@ export default async function SidebarNotes() {
           <Link href={`/notes/filter/`} className={css.menuLink}>All notes</Link>
         </li>
       </ul>
-    </aside>
+    </div>
   );
 }
