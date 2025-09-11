@@ -2,19 +2,35 @@ import { notehubAPI } from "@/lib/api/notes";
 import type { Note } from "@/types/note";
 type Props = { params: Promise<{ slug: string[] }> };
 
-export default async function Notes({ params }: Props) {
-  const { slug } = await params;
-  const category = slug[0];
-  const response = await notehubAPI.get("/notes", {
-    params: { tag: category },
+import { fetchNotes } from "@/lib/api/notes";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import NoteClient from "./NoteClient";
+export default async function NotesPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string[] };
+  searchParams: { page?: string; search?: string };
+}) {
+  const queryClient = new QueryClient();
+
+  // з урла
+  const page = Number(searchParams.page) || 1;
+  const search = searchParams.search || "";
+
+  // slug для категорії
+  const category = params.slug[0];
+  const filter = category === "All" ? undefined : category;
+
+  // префетч з урахуванням фільтра
+  await queryClient.prefetchQuery({
+    queryKey: ["notes", page, search, filter],
+    queryFn: () => fetchNotes(page, search, filter),
   });
+
   return (
-    <div>
-      <ul>
-        {response.data.notes.map((note: Note) => (
-          <li key={note.id}> {note.title}</li>
-        ))}
-      </ul>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NoteClient filter={filter} />
+    </HydrationBoundary>
   );
 }

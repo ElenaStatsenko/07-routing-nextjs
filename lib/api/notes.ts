@@ -4,6 +4,7 @@ import type { ValuesFormProps } from "@/types/note";
 export default interface NotesResponse {
   notes: Note[];
   totalPages: number;
+ 
 }
 
 const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
@@ -22,13 +23,15 @@ export const notehubAPI = axios.create({
 
 export const fetchNotes = async (
   page: number = 1,
-  search: string = ""
+  search: string = "",
+  filter?:string|undefined,
 ): Promise<NotesResponse> => {
   const { data } = await notehubAPI.get<NotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
       search: search || undefined,
+      tag: filter || undefined,
     },
   });
 
