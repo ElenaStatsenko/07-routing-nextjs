@@ -1,18 +1,21 @@
 "use client";
-import css from "./Notes.client.module.css";
+
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useState } from "react";
-import NoteList from "@/components/NoteList/NoteList";
-import Pagination from "@/components/Pagination/Pagination";
-import { fetchNotes } from "@/lib/api";
 
+import Pagination from "@/components/Pagination/Pagination";
+import { fetchNotes } from "@/lib/api/notes.ts";
+import Link from "next/link";
+
+interface TagProps{
+  filter?: string | undefined;
+}
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 
-export default function NoteClient() {
+export default function NoteClient({filter}:TagProps) {
   const [page, setPage] = useState(1);
-  const [filter] = useState(filter);
- 
+
   const [search, setSearch] = useState("");
 
   const debouncedSetSearch = useDebouncedCallback((value: string) => {
@@ -27,28 +30,38 @@ export default function NoteClient() {
   });
 
   return (
-    <div className={css.app}>
-      <header className={css.toolbar}>
+    <div >
+      <header >
         <SearchBox
           onSearch={(value) => {
             setPage(1); // ✅ скидати сторінку одразу при зміні пошуку
-            debouncedSetSearch(value); // ✅ і оновити search з debounce
+            debouncedSetSearch(value); // ✅ оновити search з debounce
           }}
         />
 
-        {isSuccess && data.totalPages > 1 && (
+        {isSuccess && data?.totalPages > 1 && (
           <Pagination
             pageCount={data?.totalPages ?? 0}
             page={page}
             setPage={setPage}
           />
         )}
-
       </header>
 
-      <NoteList notes={data?.notes} />
-
-      
+      <div>
+        <ul>
+          {data?.notes?.map((note) => (
+            <li key={note.id}>
+              <h2>{note.title}</h2>
+              <p>{note.content}</p>
+              <div>
+                <span >{note.tag}</span>
+                <Link href={`/notes/${note.id}`}>View details</Link>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

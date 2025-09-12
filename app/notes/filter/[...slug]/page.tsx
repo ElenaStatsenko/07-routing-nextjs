@@ -6,8 +6,7 @@ import { fetchNotes } from "@/lib/api/notes";
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import NoteClient from "./NoteClient";
 export default async function NotesPage({
-  params,
-  searchParams,
+  params
 }: {
   params: { slug: string[] };
   searchParams: { page?: string; search?: string };
@@ -15,8 +14,8 @@ export default async function NotesPage({
   const queryClient = new QueryClient();
 
   // з урла
-  const page = Number(searchParams.page) || 1;
-  const search = searchParams.search || "";
+  const page = 1;
+  const search = "";
 
   // slug для категорії
   const category = params.slug[0];
