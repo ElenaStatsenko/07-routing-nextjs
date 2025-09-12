@@ -1,27 +1,23 @@
-import { notehubAPI } from "@/lib/api/notes";
-import type { Note } from "@/types/note";
-type Props = { params: Promise<{ slug: string[] }> };
 
 import { fetchNotes } from "@/lib/api/notes";
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import NoteClient from "./NoteClient";
-export default async function NotesPage({
-  params
-}: {
-  params: { slug: string[] };
+type Props = {
+  params: Promise<{ slug: string[] }>; // params як проміс
   searchParams: { page?: string; search?: string };
-}) {
+};
+
+export default async function NotesPage({ params, searchParams }: Props) {
   const queryClient = new QueryClient();
 
-  // з урла
-  const page = 1;
-  const search = "";
-
-  // slug для категорії
-  const category = params.slug[0];
+  const resolvedParams = await params;
+  const category = resolvedParams.slug[0];
   const filter = category === "All" ? undefined : category;
 
-  // префетч з урахуванням фільтра
+  
+  const page = Number(searchParams.page) || 1;
+  const search = searchParams.search ?? "";
+
   await queryClient.prefetchQuery({
     queryKey: ["notes", page, search, filter],
     queryFn: () => fetchNotes(page, search, filter),
