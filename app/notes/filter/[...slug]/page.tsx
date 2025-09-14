@@ -1,7 +1,7 @@
 
 import { fetchNotes } from "@/lib/api/notes";
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import NoteClient from "./NoteClient";
+import NoteClient from "./NotesPage";
 type Props = {
   params: Promise<{ slug: string[] }>; // params як проміс
   searchParams: { page?: string; search?: string };

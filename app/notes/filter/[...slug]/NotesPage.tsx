@@ -2,20 +2,22 @@
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useState } from "react";
-
 import Pagination from "@/components/Pagination/Pagination";
-import { fetchNotes } from "@/lib/api/notes.ts";
-import Link from "next/link";
-
-interface TagProps{
-  filter?: string | undefined;
-}
+import { fetchNotes } from "@/lib/api/notes";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
+import NoteList from "@/components/NoteList/NoteList";
+import css from './NotesPage.module.css'
+import Modal from "@/components/Modal/Modal";
+import NoteForm from "@/components/NoteForm/NoteForm";
 
-export default function NoteClient({filter}:TagProps) {
+interface TagProps {
+  filter?: string | undefined;
+}
+
+export default function NotesPage({ filter }: TagProps) {
   const [page, setPage] = useState(1);
-
+const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
 
   const debouncedSetSearch = useDebouncedCallback((value: string) => {
@@ -28,40 +30,38 @@ export default function NoteClient({filter}:TagProps) {
     refetchOnMount: false,
     placeholderData: keepPreviousData,
   });
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
 
-  return (
-    <div >
-      <header >
+  return (<div className={css.app}>
+      <header className={css.toolbar}>
         <SearchBox
           onSearch={(value) => {
             setPage(1); // ✅ скидати сторінку одразу при зміні пошуку
-            debouncedSetSearch(value); // ✅ оновити search з debounce
+            debouncedSetSearch(value); // ✅ і оновити search з debounce
           }}
         />
 
-        {isSuccess && data?.totalPages > 1 && (
+        {isSuccess && data.totalPages > 1 && (
           <Pagination
             pageCount={data?.totalPages ?? 0}
             page={page}
             setPage={setPage}
           />
         )}
+
+        <button className={css.button} onClick={openModal}>
+          Create note +
+        </button>
       </header>
 
-      <div>
-        <ul>
-          {data?.notes?.map((note) => (
-            <li key={note.id}>
-              <h2>{note.title}</h2>
-              <p>{note.content}</p>
-              <div>
-                <span >{note.tag}</span>
-                <Link href={`/notes/${note.id}`}>View details</Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <NoteList notes={data?.notes} />
+ {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <NoteForm onCancel={closeModal} />
+        </Modal>
+      )}
+      
     </div>
   );
 }
