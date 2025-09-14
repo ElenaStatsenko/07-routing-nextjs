@@ -1,4 +1,4 @@
-import { fetchNoteById } from "@/lib/api/notes";
+import { fetchNoteById } from "@/lib/api";
 import Modal from "@/components/Modal/Modal";
 
 type Props = {

@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import type { FormikHelpers } from "formik";
 import * as Yup from "yup";
 import type { ValuesFormProps } from "../../types/note";
-import { createNote } from "@/lib/api/notes";
+import { createNote } from "@/lib/api";
 import ErrorMessageComponent from "../ErrorMessageComponent/ErrorMessageComponent";
 
 interface NoteFormProps {
