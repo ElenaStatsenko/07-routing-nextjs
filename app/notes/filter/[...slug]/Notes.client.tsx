@@ -7,7 +7,7 @@ import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 import NoteList from "@/components/NoteList/NoteList";
-import css from './NotesPage.module.css'
+import css from './Notes.client.module.css'
 import ModalForm from "@/components/ModalForm/ModalForm";
 import NoteForm from "@/components/NoteForm/NoteForm";
 
