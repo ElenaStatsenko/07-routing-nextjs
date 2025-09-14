@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from 'next/navigation';
 import { fetchNoteById } from "@/lib/api";
 import css from './NotePreview.client.module.css'
+
+
 const NotePreview = () => {
 	const { id } = useParams<{ id: string }>();
     const { data: note, isLoading, error } = useQuery({
