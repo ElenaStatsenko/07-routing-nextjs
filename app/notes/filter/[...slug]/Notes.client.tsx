@@ -7,7 +7,7 @@ import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 import NoteList from "@/components/NoteList/NoteList";
-import css from './Notes.client.module.css'
+import css from "./Notes.client.module.css";
 import ModalForm from "@/components/ModalForm/ModalForm";
 import NoteForm from "@/components/NoteForm/NoteForm";
 
@@ -17,7 +17,7 @@ interface TagProps {
 
 export default function NotesPage({ filter }: TagProps) {
   const [page, setPage] = useState(1);
-const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
 
   const debouncedSetSearch = useDebouncedCallback((value: string) => {
@@ -33,7 +33,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
 
-  return (<div className={css.app}>
+  return (
+    <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox
           onSearch={(value) => {
@@ -55,13 +56,12 @@ const [isModalOpen, setIsModalOpen] = useState(false);
         </button>
       </header>
 
-      <NoteList notes={data?.notes} />
- {isModalOpen && (
+      {data?.notes && <NoteList notes={data?.notes} />}
+      {isModalOpen && (
         <ModalForm onClose={closeModal}>
           <NoteForm onCancel={closeModal} />
         </ModalForm>
       )}
-      
     </div>
   );
 }
