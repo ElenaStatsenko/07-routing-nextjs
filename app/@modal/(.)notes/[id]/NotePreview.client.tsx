@@ -1,13 +1,15 @@
 "use client"
 import Modal from "@/components/Modal/Modal";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { fetchNoteById } from "@/lib/api";
 import css from './NotePreview.client.module.css'
 
 
 const NotePreview = () => {
 	const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+
     const { data: note, isLoading, error } = useQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
@@ -23,7 +25,7 @@ const NotePreview = () => {
     : `Created at: ${note.createdAt}`;
 
   return (
-    <Modal>
+    <Modal onClose={() => router.back()}>
         <div className={css.container}>
             <div className={css.item}>
       <h1 className={css.header}>{note.title}</h1>
